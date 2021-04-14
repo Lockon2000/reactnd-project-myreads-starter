@@ -1,5 +1,7 @@
 import React from 'react';
+
 import Book from "./Book";
+
 
 export default class BookShelf extends React.Component {
     render() {
@@ -10,9 +12,10 @@ export default class BookShelf extends React.Component {
                     <ol className="books-grid">
                         {this.props.books?.map(book =>
                             <li key={book.id}>
-                                <Book reference={book} title={book.title} author={book.author} style={{
+                                <Book reference={book} title={book.title} author={book.author}
+                                      shelf={book.shelf} style={{
                                     backgroundImage: `url("${book.imageLinks.smallThumbnail}")`
-                                }} updateHandler={this.props.updateHandler}/>
+                                }} handleShelfUpdate={this.props.handleShelfUpdate}/>
                             </li>
                         )}
                     </ol>
