@@ -11,6 +11,7 @@ export default class BookShelf extends React.Component {
                 <div className="bookshelf-books">
                     <ol className="books-grid">
                         {this.props.books?.map(book =>
+                            book.imageLinks !== undefined &&
                             <li key={book.id}>
                                 <Book reference={book} title={book.title} author={book.author}
                                       shelf={book.shelf} style={{

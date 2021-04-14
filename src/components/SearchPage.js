@@ -4,23 +4,33 @@ import {Link} from "react-router-dom";
 import * as BooksAPI from "../BooksAPI";
 
 import Book from "./Book";
+import {throttle} from "../helpers";
 
 
 export default class SearchPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {searchString: ''};
+
+        this.searchBooks = throttle(300)(this.searchBooks);
     }
 
     handleChange = (event) => {
-        if (event.target.value) {
-            BooksAPI.search(event.target.value).then(res => {
+        this.searchBooks(event.target.value)
+
+        this.setState({searchString: event.target.value});
+    }
+
+    searchBooks = (query) => {
+        if (query) {
+            BooksAPI.search(query).then(res => {
                 if (res instanceof Array) {
                     this.setState({books: res})
                 }
             });
+        } else {
+            this.setState({books: []})
         }
-        this.setState({searchString: event.target.value});
     }
 
     getBookShelf(searchedBook) {
@@ -50,6 +60,7 @@ export default class SearchPage extends React.Component {
                 <div className="search-books-results">
                     <ol className="books-grid">
                         {this.state.books?.map(book =>
+                            book.imageLinks !== undefined &&
                             <li key={book.id}>
                                 <Book reference={book} title={book.title} author={book.author}
                                       shelf={this.getBookShelf(book)} style={{
