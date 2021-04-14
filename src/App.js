@@ -2,15 +2,13 @@ import React from 'react'
 import {
     BrowserRouter as Router,
     Switch,
-    Route,
-    Link
+    Route
 } from "react-router-dom";
 
-import * as BooksAPI from './BooksAPI'
 import './App.css'
 
-import ShelvesPage from "./components/shelvesPage";
-import SearchPage from "./components/searchPage";
+import ShelvesPage from "./components/ShelvesPage";
+import SearchPage from "./components/SearchPage";
 
 class BooksApp extends React.Component {
     render() {
