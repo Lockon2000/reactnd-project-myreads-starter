@@ -16,7 +16,7 @@ export default class SearchPage extends React.Component {
     }
 
     handleChange = (event) => {
-        this.searchBooks(event.target.value)
+        this.searchBooks(event.target.value);
 
         this.setState({searchString: event.target.value});
     }
@@ -25,11 +25,13 @@ export default class SearchPage extends React.Component {
         if (query) {
             BooksAPI.search(query).then(res => {
                 if (res instanceof Array) {
-                    this.setState({books: res})
+                    this.setState({emptySearchResult: false, books: res});
+                } else {
+                    this.setState({emptySearchResult: true});
                 }
             });
         } else {
-            this.setState({books: []})
+            this.setState({books: []});
         }
     }
 
@@ -58,17 +60,21 @@ export default class SearchPage extends React.Component {
                     </div>
                 </div>
                 <div className="search-books-results">
-                    <ol className="books-grid">
-                        {this.state.books?.map(book =>
-                            book.imageLinks !== undefined &&
-                            <li key={book.id}>
-                                <Book reference={book} title={book.title} author={book.author}
-                                      shelf={this.getBookShelf(book)} style={{
-                                    backgroundImage: `url("${book.imageLinks.smallThumbnail}")`
-                                }} handleShelfUpdate={this.props.handleShelfUpdate}/>
-                            </li>
-                        )}
-                    </ol>
+                    {
+                        this.state.emptySearchResult ?
+                            <h2 className="search-books-results-empty">No books found for search</h2> :
+                            <ol className="books-grid">
+                                {this.state.books?.map(book =>
+                                    book.imageLinks !== undefined &&
+                                    <li key={book.id}>
+                                        <Book reference={book} title={book.title} author={book.author}
+                                              shelf={this.getBookShelf(book)} style={{
+                                            backgroundImage: `url("${book.imageLinks.smallThumbnail}")`
+                                        }} handleShelfUpdate={this.props.handleShelfUpdate}/>
+                                    </li>
+                                )}
+                            </ol>
+                    }
                 </div>
             </div>
         )
